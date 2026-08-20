@@ -69,4 +69,30 @@ export default defineConfig({
     __APP_VERSION__:JSON.stringify(process.env.npm_package_version),
     __BUILD_TIME_ISO__:JSON.stringify(new Date().toISOString()),
   },
+  build:{
+    rolldownOptions:{
+      output:{
+        codeSplitting: {
+          groups:[
+            {
+              name: "opencv-sdk",
+              test: /opencv-js/,
+              priority:200
+            },
+            {
+              name: "paddleocr-sdk",
+              test: /@paddleocr[\\/]paddleocr-js|onnxruntime-web/,
+              priority:200
+            },
+            {
+              name: "vendor",
+              test: /[\\/]node_modules[\\/]/,
+              priority:100
+            },
+          ],
+        },
+        chunkFileNames:"chunk-[name]-[hash].js"
+      },
+    },
+  },
 })
