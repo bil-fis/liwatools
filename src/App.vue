@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 import Sidebar from './components/Sidebar.vue'
 import ToolView from './components/ToolView.vue'
+import HomeView from './components/HomeView.vue'
 import AppHeader from './components/AppHeader.vue'
 import BackgroundLayer from './components/BackgroundLayer.vue'
+
+const route = useRoute()
+
+/** 主页：保留顶栏、不显示侧边栏 */
+const isHome = computed(() => route.name === 'home')
 
 const MOBILE_BP = 768
 const isMobile = ref(false)
@@ -29,17 +36,19 @@ onUnmounted(() => window.removeEventListener('resize', checkViewport))
     <BackgroundLayer />
 
     <AppHeader
-      :is-mobile="isMobile"
+      :is-mobile="isMobile && !isHome"
       @toggle-mobile="mobileOpen = !mobileOpen"
     />
 
     <div class="body-row">
       <Sidebar
+        v-if="!isHome"
         :collapsed="false"
         :mobile-open="mobileOpen"
         @close="mobileOpen = false"
       />
-      <ToolView />
+      <HomeView v-if="isHome" />
+      <ToolView v-else />
     </div>
   </div>
 </template>
