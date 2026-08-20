@@ -19,13 +19,29 @@ const MOBILE_BP = 768
 const isMobile = ref(false)
 const mobileOpen = ref(false) // 移动端抽屉
 
-// ===== 主题切换：波纹扩散（clip-path 圆形遮罩） =====
+// ===== 主题切换：波纹扩散（clip-path 圆形遮罩，仿参考实现） =====
+// 遮罩是「深色本身」：常驻于内容之下（z-index 0），背景恒为深色底色。
+// 切深色 → 深色波纹从按钮中心向外扩散；切浅色 → 深色波纹回缩露出浅色。
+// 主题在动画开始时立即切换（波纹经过即变色）。
 const overlayRef = ref<HTMLElement | null>(null)
 const themeAnimating = ref(false)
 const prefersReducedMotion =
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-function onToggleTheme(el: HTMLElement) {
+function getBtnCenter() {
+  const btn = document.querySelector<HTMLElement>('.theme-btn')
+  if (!btn) return { cx: window.innerWidth / 2, cy: window.innerHeight / 2 }
+  const rect = btn.getBoundingClientRect()
+  return { cx: rect.left + rect.width / 2, cy: rect.top + rect.height / 2 }
+}
+
+function setOverlayClip(cx: number, cy: number, radiusPercent: string) {
+  const overlay = overlayRef.value
+  if (!overlay) return
+  overlay.style.clipPath = `circle(${radiusPercent} at ${cx}px ${cy}px)`
+}
+
+function onToggleTheme() {
   if (themeAnimating.value) return
   const overlay = overlayRef.value
   const targetDark = !themeStore.dark
@@ -34,19 +50,18 @@ function onToggleTheme(el: HTMLElement) {
     return
   }
   themeAnimating.value = true
-  const rect = el.getBoundingClientRect()
-  const cx = rect.left + rect.width / 2
-  const cy = rect.top + rect.height / 2
-  // 遮罩铺上「旧主题」底色，然后从按钮中心回缩——
-  // 主题在动画开始时立即切换，波纹经过之处即为新主题（波纹经过即变色）
-  overlay.style.background = targetDark ? '#f0f8ff' : '#090d17'
+  const { cx, cy } = getBtnCenter()
+  const from = themeStore.dark ? '150%' : '0%'
+  const to = targetDark ? '150%' : '0%'
+
   gsap.killTweensOf(overlay)
-  gsap.set(overlay, { clipPath: `circle(150% at ${cx}px ${cy}px)` })
+  setOverlayClip(cx, cy, from)
+  // 波纹经过即变色：动画开始就切换主题
   themeStore.setDark(targetDark)
   gsap.to(overlay, {
-    clipPath: `circle(0% at ${cx}px ${cy}px)`,
-    duration: 0.75,
-    ease: 'power2.inOut',
+    clipPath: `circle(${to} at ${cx}px ${cy}px)`,
+    duration: 0.85,
+    ease: 'power2.out',
     onComplete: () => {
       themeAnimating.value = false
     },
@@ -61,12 +76,28 @@ function checkViewport() {
   }
 }
 
+// 窗口 resize 时按当前主题状态更新遮罩圆心与半径
+let resizeTimer: number | undefined
+function syncOverlay() {
+  clearTimeout(resizeTimer)
+  resizeTimer = window.setTimeout(() => {
+    const { cx, cy } = getBtnCenter()
+    setOverlayClip(cx, cy, themeStore.dark ? '150%' : '0%')
+  }, 100)
+}
+
 onMounted(() => {
   themeStore.apply() // 与 index.html 预置保持一致
+  const { cx, cy } = getBtnCenter()
+  setOverlayClip(cx, cy, themeStore.dark ? '150%' : '0%')
   checkViewport()
   window.addEventListener('resize', checkViewport)
+  window.addEventListener('resize', syncOverlay)
 })
-onUnmounted(() => window.removeEventListener('resize', checkViewport))
+onUnmounted(() => {
+  window.removeEventListener('resize', checkViewport)
+  window.removeEventListener('resize', syncOverlay)
+})
 </script>
 
 <template>
@@ -78,7 +109,7 @@ onUnmounted(() => window.removeEventListener('resize', checkViewport))
     <AppHeader
       :is-mobile="isMobile && !isHome"
       @toggle-mobile="mobileOpen = !mobileOpen"
-      @toggle-theme="onToggleTheme"
+      @toggle-theme="onToggleTheme()"
     />
 
     <div class="body-row">
@@ -104,9 +135,12 @@ onUnmounted(() => window.removeEventListener('resize', checkViewport))
   box-shadow: var(--shadow);
   overflow: hidden;
 }
+/* 内容置于主题遮罩之上，波纹在下方透过半透明面板可见 */
 .body-row {
   flex: 1;
   min-height: 0;
   display: flex;
+  position: relative;
+  z-index: 1;
 }
 </style>

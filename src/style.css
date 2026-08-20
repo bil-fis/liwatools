@@ -323,13 +323,15 @@ textarea::-webkit-scrollbar-thumb:hover,
 }
 
 /* =========================================================
-   主题切换波纹遮罩（App.vue 中的固定层，由 gsap 驱动 clip-path）
+   主题切换波纹遮罩（仿参考实现）
+   深色本体：常驻于内容之下、背景图之上（z-index 0），
+   透过半透明面板可见；由 gsap 驱动 clip-path 扩散/回缩。
    ========================================================= */
 .theme-overlay {
     position: fixed;
     inset: 0;
-    z-index: 150; /* 高于内容、低于顶栏(300)，切换时按钮保持可见 */
-    background: #f0f8ff;
+    z-index: 0;
+    background: #090d17; /* 与深色模式 --color-background 一致 */
     clip-path: circle(0% at 50% 50%);
     pointer-events: none;
     will-change: clip-path;
@@ -645,12 +647,11 @@ html[data-theme='dark'] ::selection {
     color: var(--text-h);
 }
 
-/* 顶栏 / 侧栏 / 卡片 平滑过渡（配合波纹切换，波纹经过即变色） */
+/* 顶栏 / 侧栏 / logo 平滑过渡（配合波纹切换，波纹经过即变色） */
 html[data-theme='dark'] .app-header,
 html[data-theme='dark'] .sidebar,
 html[data-theme='dark'] .logo-text,
-html[data-theme='dark'] .logo-tag,
-html[data-theme='dark'] .card {
+html[data-theme='dark'] .logo-tag {
     transition: background 0.45s ease, border-color 0.45s ease, color 0.45s ease,
         box-shadow 0.45s ease;
 }
