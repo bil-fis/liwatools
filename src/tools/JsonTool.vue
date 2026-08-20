@@ -149,7 +149,7 @@ function formatJSON() {
     errorMsg.value = ''
   } catch (e) {
     setStatus('invalid', 'JSON 无效')
-    errorMsg.value = '⚠️ ' + (e as Error).message
+    errorMsg.value = (e as Error).message
     output.value = input.value
   }
 }
@@ -167,7 +167,7 @@ function minifyJSON() {
     setOutput(output.value)
   } catch (e) {
     setStatus('invalid', 'JSON 无效')
-    errorMsg.value = '⚠️ ' + (e as Error).message
+    errorMsg.value = (e as Error).message
   }
 }
 function validateJSON() {
@@ -180,11 +180,11 @@ function validateJSON() {
   try {
     const parsed = JSON.parse(v)
     setOutput(JSON.stringify(parsed, null, getIndent()))
-    setStatus('valid', '✅ JSON 合法')
+    setStatus('valid', 'JSON 合法')
     errorMsg.value = ''
   } catch (e) {
     setStatus('invalid', 'JSON 无效')
-    errorMsg.value = '⚠️ ' + (e as Error).message
+    errorMsg.value = (e as Error).message
   }
 }
 function escapeJSON() {
@@ -234,7 +234,7 @@ async function copyOutput() {
   }
   try {
     await navigator.clipboard.writeText(text)
-    setStatus('valid', '✅ 已复制到剪贴板')
+    setStatus('valid', '已复制到剪贴板')
   } catch {
     const ta = document.createElement('textarea')
     ta.value = text
@@ -242,7 +242,7 @@ async function copyOutput() {
     ta.select()
     document.execCommand('copy')
     document.body.removeChild(ta)
-    setStatus('valid', '✅ 已复制')
+    setStatus('valid', '已复制')
   }
 }
 function downloadJSON() {
@@ -260,7 +260,7 @@ function downloadJSON() {
   a.click()
   document.body.removeChild(a)
   URL.revokeObjectURL(url)
-  setStatus('valid', '✅ 下载成功')
+  setStatus('valid', '下载成功')
 }
 function clearAll() {
   input.value = ''
@@ -291,7 +291,7 @@ function onInput() {
   if (v) {
     try {
       JSON.parse(v)
-      setStatus('valid', '✅ JSON 合法')
+      setStatus('valid', 'JSON 合法')
       errorMsg.value = ''
     } catch {
       setStatus('idle', '输入中…')
@@ -396,14 +396,14 @@ function openJsonpath() {
 function executeJsonPath() {
   const v = input.value.trim()
   if (!v) {
-    jsonpathResult.value = '<span class="j-danger">⚠️ 请先在主输入中提供 JSON 数据</span>'
+    jsonpathResult.value = '<span class="j-danger"><i class="i-mingcute-alert-line"></i> 请先在主输入中提供 JSON 数据</span>'
     return
   }
   let obj: any
   try {
     obj = JSON.parse(v)
   } catch {
-    jsonpathResult.value = '<span class="j-danger">⚠️ 主输入中的 JSON 无效</span>'
+    jsonpathResult.value = '<span class="j-danger"><i class="i-mingcute-alert-line"></i> 主输入中的 JSON 无效</span>'
     return
   }
   const p = jsonpathExpr.value.trim()
@@ -482,23 +482,28 @@ function executeCompare() {
   try {
     lo = JSON.parse(l)
   } catch {
-    compareResult.value = '<span class="j-danger">⚠️ 左侧 JSON 无效</span>'
+    compareResult.value = '<span class="j-danger"><i class="i-mingcute-alert-line"></i> 左侧 JSON 无效</span>'
     return
   }
   try {
     ro = JSON.parse(r)
   } catch {
-    compareResult.value = '<span class="j-danger">⚠️ 右侧 JSON 无效</span>'
+    compareResult.value = '<span class="j-danger"><i class="i-mingcute-alert-line"></i> 右侧 JSON 无效</span>'
     return
   }
   const diff = deepDiff(lo, ro)
   if (diff.length === 0) {
-    compareResult.value = '<span class="j-success">✅ 两个 JSON 完全相同</span>'
+    compareResult.value = '<span class="j-success"><i class="i-mingcute-check-circle-line"></i> 两个 JSON 完全相同</span>'
   } else {
     let html = '<span class="j-strong">差异列表:</span>\n'
     for (const d of diff) {
       const color = d.type === 'added' ? 'var(--success)' : d.type === 'removed' ? 'var(--error)' : 'var(--warning)'
-      const icon = d.type === 'added' ? '➕' : d.type === 'removed' ? '➖' : '✏️'
+      const icon =
+        d.type === 'added'
+          ? '<i class="i-mingcute-add-line"></i>'
+          : d.type === 'removed'
+            ? '<i class="i-mingcute-subtract-line"></i>'
+            : '<i class="i-mingcute-pencil-line"></i>'
       html += `<div style="color:${color};padding:2px 0;">${icon} ${escapeHtml(d.path)}: ${escapeHtml(d.message)}</div>`
     }
     compareResult.value = html
@@ -558,25 +563,25 @@ watch([input, indent, output, outputMode], () => {
     <div class="jtoolbar">
       <div class="jgroup">
         <span class="jlabel">编辑</span>
-        <button class="jb primary" @click="formatJSON">💎 格式化</button>
-        <button class="jb" @click="minifyJSON">📦 压缩</button>
-        <button class="jb" @click="validateJSON">✅ 验证</button>
+        <button class="jb primary" @click="formatJSON"><span class="i-mingcute-diamond-fill"></span> 格式化</button>
+        <button class="jb" @click="minifyJSON"><span class="i-mingcute-package-fill"></span> 压缩</button>
+        <button class="jb" @click="validateJSON"><span class="i-mingcute-check-circle-line"></span> 验证</button>
       </div>
       <div class="jgroup">
         <span class="jlabel">转义</span>
-        <button class="jb" @click="escapeJSON">↔️ 转义</button>
-        <button class="jb" @click="unescapeJSON">↩️ 反转义</button>
+        <button class="jb" @click="escapeJSON"><span class="i-mingcute-refresh-1-line"></span> 转义</button>
+        <button class="jb" @click="unescapeJSON"><span class="i-mingcute-refresh-2-line"></span> 反转义</button>
       </div>
       <div class="jgroup">
         <span class="jlabel">高级</span>
-        <button class="jb" @click="openJsonpath">🔍 JSONPath</button>
-        <button class="jb" @click="openCompare">📊 比较</button>
+        <button class="jb" @click="openJsonpath"><span class="i-mingcute-search-2-line"></span> JSONPath</button>
+        <button class="jb" @click="openCompare"><span class="i-mingcute-transfer-line"></span> 比较</button>
       </div>
       <div class="jgroup">
         <span class="jlabel">操作</span>
-        <button class="jb" @click="copyOutput">📋 复制</button>
-        <button class="jb" @click="downloadJSON">💾 下载</button>
-        <button class="jb danger" @click="clearAll">🗑 清空</button>
+        <button class="jb" @click="copyOutput"><span class="i-mingcute-copy-2-line"></span> 复制</button>
+        <button class="jb" @click="downloadJSON"><span class="i-mingcute-file-download-line"></span> 下载</button>
+        <button class="jb danger" @click="clearAll"><span class="i-mingcute-delete-line"></span> 清空</button>
       </div>
       <div class="jgroup" style="border-right: none; padding-right: 0; margin-right: 0">
         <span class="jlabel">缩进</span>
@@ -593,10 +598,10 @@ watch([input, indent, output, outputMode], () => {
     <div class="panes">
       <div class="pane">
         <div class="pane-head">
-          <span>📥 输入</span>
+          <span><span class="i-mingcute-file-import-line"></span> 输入</span>
           <div class="pane-act">
-            <button class="jmini" @click="loadFile">📂 加载</button>
-            <button class="jmini" @click="pasteFromClip">📋 粘贴</button>
+            <button class="jmini" @click="loadFile"><span class="i-mingcute-folder-upload-line"></span> 加载</button>
+            <button class="jmini" @click="pasteFromClip"><span class="i-mingcute-clipboard-line"></span> 粘贴</button>
             <input ref="fileInput" type="file" accept=".json,.jsonc" hidden @change="onFileChange" />
           </div>
         </div>
@@ -621,11 +626,11 @@ watch([input, indent, output, outputMode], () => {
       <div class="pane">
         <div class="pane-head">
           <span>
-            📤 输出
+            <span class="i-mingcute-file-export-line"></span> 输出
             <span class="pane-sub">{{ outputMode === 'highlight' ? '(高亮)' : '(原始)' }}</span>
           </span>
           <div class="pane-act">
-            <button class="jmini" @click="toggleOutputMode">🔄 原始/高亮</button>
+            <button class="jmini" @click="toggleOutputMode"><span class="i-mingcute-refresh-1-line"></span> 原始/高亮</button>
           </div>
         </div>
         <div class="editor-wrap">
@@ -652,7 +657,7 @@ watch([input, indent, output, outputMode], () => {
         <span class="stat"><span class="slabel">键:</span><b>{{ keyCount }}</b></span>
         <span class="stat"><span class="slabel">大小:</span><b>{{ byteSize }}</b></span>
         <span class="stat"><span class="slabel">行:</span><b>{{ inputLineCount }}</b></span>
-        <span v-if="errorMsg" class="err-msg">⚠️ {{ errorMsg }}</span>
+        <span v-if="errorMsg" class="err-msg"><i class="i-mingcute-alert-line"></i> {{ errorMsg }}</span>
       </div>
       <div class="right">
         <span>{{ cursorInfo }}</span>
@@ -664,7 +669,7 @@ watch([input, indent, output, outputMode], () => {
     <div class="modal-overlay" :class="{ active: showJsonpath }" @click.self="showJsonpath = false">
       <div class="modal">
         <div class="modal-head">
-          <h2>🔍 JSONPath 查询</h2>
+          <h2><span class="i-mingcute-search-2-line"></span> JSONPath 查询</h2>
           <button class="close" @click="showJsonpath = false">×</button>
         </div>
         <div class="modal-body">
@@ -693,7 +698,7 @@ watch([input, indent, output, outputMode], () => {
     <div class="modal-overlay" :class="{ active: showCompare }" @click.self="showCompare = false">
       <div class="modal wide">
         <div class="modal-head">
-          <h2>📊 JSON 比较</h2>
+          <h2><span class="i-mingcute-transfer-line"></span> JSON 比较</h2>
           <button class="close" @click="showCompare = false">×</button>
         </div>
         <div class="modal-body">
@@ -709,7 +714,7 @@ watch([input, indent, output, outputMode], () => {
           </div>
           <div class="modal-actions">
             <button class="jb primary" @click="executeCompare">比较</button>
-            <button class="jb" @click="swapCompare">⇄ 交换</button>
+            <button class="jb" @click="swapCompare"><span class="i-mingcute-transfer-line"></span> 交换</button>
             <button
               class="jb"
               @click="compareLeft = ''; compareRight = ''; compareResult = '<span class=\'j-muted\'>已清空</span>'"
@@ -764,20 +769,22 @@ watch([input, indent, output, outputMode], () => {
   letter-spacing: 0.5px;
 }
 .jb {
-  background: transparent;
-  border: none;
+  background: #fff;
+  border: 1px solid var(--border);
   color: var(--text-h);
   padding: 6px 12px;
   border-radius: 9px;
   font: inherit;
   font-size: 13px;
   cursor: pointer;
-  transition: background 0.18s ease, transform 0.12s ease, color 0.18s ease;
+  transition: background 0.18s ease, transform 0.12s ease, color 0.18s ease,
+    border-color 0.18s ease;
   white-space: nowrap;
 }
 .jb:hover {
-  background: #fff;
-  color: var(--color-primary-dark);
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 .jb:active {
   transform: scale(0.96);

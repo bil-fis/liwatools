@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
@@ -8,13 +8,44 @@
   </head>
   <body>
     <div id="app"></div>
+
+    <div
+      id="too-old"
+      style="display:none;position:fixed;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:20px;background:#ffffff;color:#5a6b8c;font-family:'PingFang SC','Microsoft YaHei',system-ui,sans-serif;text-align:center;padding:24px;"
+    >
+      <img src="/7db1de10f990e9570cb8cce8cf65b000_5109338711135846483.jpg" alt="德莉莎世界第一可爱" style="height:100px;" />
+      <p style="margin:0;font-size:18px;font-weight:700;letter-spacing:.5px;color:#3f5683;">升级一下浏览器再来使用喵</p>
+      <p style="margin:0;font-size:13px;color:#9aa8c4;">Ciallo～(∠・ω&lt;)⌒★</p>
+    </div>
+
+    <!-- 极简特性检测：浏览器过老（连模块/关键特性都不支持）才显示提示层 -->
+    <script>
+      (function () {
+        try {
+          var ok =
+            'noModule' in document.createElement('script') &&
+            'Promise' in window &&
+            'fetch' in window &&
+            'assign' in Object &&
+            'from' in Array
+          if (!ok) {
+            var el = document.getElementById('too-old')
+            if (el) el.style.display = 'flex'
+          }
+        } catch (e) {
+          var el2 = document.getElementById('too-old')
+          if (el2) el2.style.display = 'flex'
+        }
+      })()
+    </script>
+
     <script type="module" src="/src/main.ts"></script>
 
     <noscript>
       <div style="position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;background:#ffffff;color:#5a6b8c;font-family:'PingFang SC','Microsoft YaHei',system-ui,sans-serif;text-align:center;padding:24px;">
         <img src="/7db1de10f990e9570cb8cce8cf65b000_5109338711135846483.jpg" alt="德莉莎世界第一可爱" style="height:100px;"/>
         <p style="margin:0;font-size:18px;font-weight:700;letter-spacing:.5px;color:#3f5683;">请启用 JavaScript 以使用晚晚工具箱</p>
-        <p style="margin:0;font-size:13px;color:#9aa8c4;">Ciallo～(∠・ω<)⌒★</p>
+        <p style="margin:0;font-size:13px;color:#9aa8c4;">Ciallo～(∠・ω&lt;)⌒★</p>
       </div>
     </noscript>
   </body>

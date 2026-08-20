@@ -56,9 +56,9 @@ const statusClass = computed(() => {
   return 'stopped'
 })
 const statusText = computed(() => {
-  if (state.value.mode === 'countdown' && ended.value) return '⏰ 时间到!'
+  if (state.value.mode === 'countdown' && ended.value) return '时间到!'
   if (isRunning.value) return '● 运行中'
-  if (isPaused.value) return '⏸ 暂停'
+  if (isPaused.value) return '暂停'
   return '● 停止'
 })
 
@@ -69,9 +69,9 @@ const pauseDisabled = computed(() => {
   return !isRunning.value && !isPaused.value
 })
 const startText = computed(() => {
-  if (state.value.mode === 'countdown' && ended.value) return '↻ 重开'
-  if (isPaused.value) return '▶ 继续'
-  return '▶ 开始'
+  if (state.value.mode === 'countdown' && ended.value) return '重开'
+  if (isPaused.value) return '继续'
+  return '开始'
 })
 
 // ===== 提示音引擎（Web Audio，C5-E5-G5 上升三音） =====
@@ -247,7 +247,7 @@ onUnmounted(() => {
       <!-- 头部 -->
       <div class="header">
         <h1>
-          ⏱ 秒表
+          <span class="i-mingcute-stopwatch-line"></span> 秒表
           <span class="tag">正向 · 倒计时</span>
         </h1>
         <div class="mode-toggle">
@@ -263,7 +263,7 @@ onUnmounted(() => {
             :class="{ active: state.mode === 'countdown' }"
             @click="switchMode('countdown')"
           >
-            ⏳ 倒计时
+            <span class="i-mingcute-time-fill"></span> 倒计时
           </button>
         </div>
       </div>
@@ -315,16 +315,18 @@ onUnmounted(() => {
       <!-- 控制按钮 -->
       <div class="controls">
         <button class="ctrl-btn primary" :disabled="startDisabled" @click="onStart">
-          {{ startText }}
+          <span class="i-mingcute-play-line"></span> {{ startText }}
         </button>
-        <button class="ctrl-btn outline" :disabled="pauseDisabled" @click="onPause">⏸ 暂停</button>
+        <button class="ctrl-btn outline" :disabled="pauseDisabled" @click="onPause">
+          <span class="i-mingcute-pause-line"></span> 暂停
+        </button>
         <button class="ctrl-btn outline" @click="onReset">⟲ 重置</button>
       </div>
 
       <!-- 脚注 -->
       <div class="footer" style="display:none;">
-        <span>🔔 倒计时结束自动响铃 (C5-E5-G5)</span>
-        <button class="test-sound" @click="onTest">🔊 测试提示音</button>
+        <span><span class="i-mingcute-bell-ringing-line"></span> 倒计时结束自动响铃 (C5-E5-G5)</span>
+        <button class="test-sound" @click="onTest"><span class="i-mingcute-volume-line"></span> 测试提示音</button>
       </div>
     </div>
   </div>
@@ -616,7 +618,7 @@ onUnmounted(() => {
 .test-sound {
   background: transparent;
   border: none;
-  color: var(--text);
+  color: var(--accent);
   font: inherit;
   font-size: 12px;
   cursor: pointer;

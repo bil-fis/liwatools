@@ -305,9 +305,9 @@ function onNum(field: 'count' | 'min' | 'max' | 'decimals', e: Event) {
 
     <!-- 脚注 -->
     <div class="footnote">
-      <span>🔹 范围 [最小值, 最大值)</span>
-      <span>🔹 浮点数最多 1000 位小数</span>
-      <span>🔹 唯一性：自动去重</span>
+      <span><i class="i-mingcute-diamond-fill"></i> 范围 [最小值, 最大值)</span>
+      <span><i class="i-mingcute-diamond-fill"></i> 浮点数最多 1000 位小数</span>
+      <span><i class="i-mingcute-diamond-fill"></i> 唯一性：自动去重</span>
     </div>
 
     <transition name="toast">

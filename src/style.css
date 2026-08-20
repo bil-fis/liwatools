@@ -108,6 +108,19 @@ p {
     margin: 0;
 }
 
+/* ---- 按钮全局基调：统一字体、光标与聚焦态 ---- */
+button {
+    font: inherit;
+    cursor: pointer;
+}
+button:disabled {
+    cursor: not-allowed;
+}
+button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
 /* ---- 共享工具控件样式 ---- */
 .tool-body {
     display: flex;
@@ -245,38 +258,46 @@ label {
 .scroll,
 .tool-scroll,
 .table-scroll,
+.nav,
 pre.out,
 textarea,
 .content-body,
+.md-pane-body,
 .grid,
 .list-scroll {
     scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
+    scrollbar-color: rgba(135, 206, 235, 0.55) transparent;
 }
 .scroll::-webkit-scrollbar,
 .tool-scroll::-webkit-scrollbar,
 .table-scroll::-webkit-scrollbar,
+.nav::-webkit-scrollbar,
 pre.out::-webkit-scrollbar,
 textarea::-webkit-scrollbar,
-.content-body::-webkit-scrollbar {
+.content-body::-webkit-scrollbar,
+.md-pane-body::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
 .scroll::-webkit-scrollbar-track,
 .tool-scroll::-webkit-scrollbar-track,
 .table-scroll::-webkit-scrollbar-track,
+.nav::-webkit-scrollbar-track,
 pre.out::-webkit-scrollbar-track,
 textarea::-webkit-scrollbar-track,
-.content-body::-webkit-scrollbar-track {
+.content-body::-webkit-scrollbar-track,
+.md-pane-body::-webkit-scrollbar-track {
     background: transparent;
 }
 .scroll::-webkit-scrollbar-thumb,
 .tool-scroll::-webkit-scrollbar-thumb,
 .table-scroll::-webkit-scrollbar-thumb,
+.nav::-webkit-scrollbar-thumb,
 pre.out::-webkit-scrollbar-thumb,
 textarea::-webkit-scrollbar-thumb,
-.content-body::-webkit-scrollbar-thumb {
-    background: var(--border);
+.content-body::-webkit-scrollbar-thumb,
+.md-pane-body::-webkit-scrollbar-thumb {
+    background: rgba(135, 206, 235, 0.55);
     border-radius: 10px;
     border: 2px solid transparent;
     background-clip: padding-box;
@@ -284,9 +305,11 @@ textarea::-webkit-scrollbar-thumb,
 .scroll::-webkit-scrollbar-thumb:hover,
 .tool-scroll::-webkit-scrollbar-thumb:hover,
 .table-scroll::-webkit-scrollbar-thumb:hover,
+.nav::-webkit-scrollbar-thumb:hover,
 pre.out::-webkit-scrollbar-thumb:hover,
 textarea::-webkit-scrollbar-thumb:hover,
-.content-body::-webkit-scrollbar-thumb:hover {
+.content-body::-webkit-scrollbar-thumb:hover,
+.md-pane-body::-webkit-scrollbar-thumb:hover {
     background: var(--accent);
     background-clip: padding-box;
 }

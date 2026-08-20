@@ -167,7 +167,7 @@ function select(id: string) {
 .sidebar {
   position: relative;
   z-index: 20;
-  width: 220px;
+  width: 252px;
   flex-shrink: 0;
   padding: 20px 14px;
   display: flex;
@@ -193,7 +193,9 @@ function select(id: string) {
   gap: 4px;
   flex: 1 1 auto;
   overflow-y: auto;
+  overflow-x: hidden;
   min-height: 0;
+  overscroll-behavior: contain;
 }
 
 /* 搜索框 */
@@ -332,18 +334,15 @@ function select(id: string) {
   margin-top: 2px;
   border-left: 1.5px dashed var(--border);
   margin-left: 14px;
-  overflow: hidden;
   animation: catIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 @keyframes catIn {
   from {
     opacity: 0;
-    transform: translateY(-6px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 

@@ -1,14 +1,26 @@
+import { defineAsyncComponent, type Component } from 'vue'
 import type { CategoryDef, ToolDef } from './types'
-import JsonTool from './JsonTool.vue'
-import TimestampTool from './TimestampTool.vue'
-import Base64Tool from './Base64Tool.vue'
-import StopwatchTool from './StopwatchTool.vue'
-import RandomTool from './RandomTool.vue'
-import ColorTool from './ColorTool.vue'
-import ImageBatchTool from './ImageBatchTool.vue'
-import DocBatchTool from './DocBatchTool.vue'
-import ImageCompressTool from './ImageCompressTool.vue'
-import OcrTool from './OcrTool.vue'
+
+/** 加载占位：二次元可爱风 */
+const LoadingComp: Component = {
+  template:
+    '<div style="padding:56px;text-align:center;color:#9aa8c4;font-size:14px;"><i class="i-mingcute-loading-line"></i> 少女祈祷中…</div>',
+}
+/** 加载失败占位 */
+const ErrorComp: Component = {
+  template:
+    '<div style="padding:56px;text-align:center;color:#e5484d;font-size:14px;">加载失败，请刷新页面 (╥﹏╥)</div>',
+}
+
+/** 懒加载包装：切到该工具时才加载对应 chunk */
+const lazy = (loader: () => Promise<{ default: Component }>): Component =>
+  defineAsyncComponent({
+    loader,
+    loadingComponent: LoadingComp,
+    errorComponent: ErrorComp,
+    delay: 120,
+    timeout: 20000,
+  })
 
 /** 分类顺序即侧栏展示顺序 */
 export const categories: CategoryDef[] = [
@@ -23,7 +35,7 @@ export const tools: ToolDef[] = [
     id: 'json',
     name: 'JSON 格式化',
     icon: 'brackets-line',
-    component: JsonTool,
+    component: lazy(() => import('./JsonTool.vue')),
     desc: '美化 / 校验 JSON 文本',
     category: 'dev',
   },
@@ -31,7 +43,7 @@ export const tools: ToolDef[] = [
     id: 'timestamp',
     name: '时间戳转换',
     icon: 'time-line',
-    component: TimestampTool,
+    component: lazy(() => import('./TimestampTool.vue')),
     desc: 'Unix 时间戳与日期互转',
     category: 'dev',
   },
@@ -39,7 +51,7 @@ export const tools: ToolDef[] = [
     id: 'base64',
     name: 'Base64 编解码',
     icon: 'code-line',
-    component: Base64Tool,
+    component: lazy(() => import('./Base64Tool.vue')),
     desc: '文本与 Base64 互相转换',
     category: 'dev',
   },
@@ -47,7 +59,7 @@ export const tools: ToolDef[] = [
     id: 'random',
     name: '随机数生成',
     icon: 'hashtag-line',
-    component: RandomTool,
+    component: lazy(() => import('./RandomTool.vue')),
     desc: '生成批量随机整数/小数，支持去重与排序',
     category: 'dev',
   },
@@ -55,15 +67,23 @@ export const tools: ToolDef[] = [
     id: 'stopwatch',
     name: '秒表 · 倒计时',
     icon: 'time-line',
-    component: StopwatchTool,
+    component: lazy(() => import('./StopwatchTool.vue')),
     desc: '正向计时与倒计时，结束自动响铃',
+    category: 'dev',
+  },
+  {
+    id: 'markdown',
+    name: 'Markdown 编辑器',
+    icon: 'edit-line',
+    component: lazy(() => import('./MarkdownTool.vue')),
+    desc: '实时预览的 Markdown 编辑与导出',
     category: 'dev',
   },
   {
     id: 'image-batch',
     name: '图片批量转换',
     icon: 'photo-album-line',
-    component: ImageBatchTool,
+    component: lazy(() => import('./ImageBatchTool.vue')),
     desc: '批量转换图片格式（PNG / JPG / WEBP）',
     category: 'convert',
   },
@@ -71,7 +91,7 @@ export const tools: ToolDef[] = [
     id: 'doc-batch',
     name: '文档批量转换',
     icon: 'file-line',
-    component: DocBatchTool,
+    component: lazy(() => import('./DocBatchTool.vue')),
     desc: '批量转换文档格式（待实现）',
     category: 'convert',
   },
@@ -79,7 +99,7 @@ export const tools: ToolDef[] = [
     id: 'color',
     name: '颜色转换',
     icon: 'palette-line',
-    component: ColorTool,
+    component: lazy(() => import('./ColorTool.vue')),
     desc: 'HEX / RGB / RGBA 互转（支持透明度）',
     category: 'color',
   },
@@ -87,7 +107,7 @@ export const tools: ToolDef[] = [
     id: 'image-compress',
     name: '图片压缩',
     icon: 'file-zip-line',
-    component: ImageCompressTool,
+    component: lazy(() => import('./ImageCompressTool.vue')),
     desc: '纯前端压缩图片体积，保护隐私',
     category: 'image',
   },
@@ -95,7 +115,7 @@ export const tools: ToolDef[] = [
     id: 'ocr',
     name: '图片文字提取',
     icon: 'scan-line',
-    component: OcrTool,
+    component: lazy(() => import('./OcrTool.vue')),
     desc: 'PaddleOCR 本地识别图片文字',
     category: 'image',
   },

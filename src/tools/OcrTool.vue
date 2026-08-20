@@ -418,6 +418,7 @@ onBeforeUnmount(() => {
 .mini:active { transform: scale(0.94); }
 .mini span { font-size: 14px; }
 .mini.danger { background: #fff; color: #e05c7a; border: 1.5px solid #ffd4de; }
+.mini.danger:hover { background: #ffeef2; border-color: #ffb3c5; }
 
 .privacy {
   display: flex;
