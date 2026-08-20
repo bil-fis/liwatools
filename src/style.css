@@ -1,0 +1,299 @@
+@font-face {
+    font-family: 'RHRounded';
+    src: url('./assets/fonts/rhrcn-m.woff') format('woff');
+    font-weight: 500;
+    font-display: swap;
+}
+
+:root {
+    /* ========== 品牌主色 (天蓝) ========== */
+    --color-primary: #87ceeb;          /* 主品牌色 - 晴空蓝 */
+    --color-primary-dark: #5ba3c9;     /* 悬停/深度强调 */
+    --color-primary-light: #f0f8ff;    /* 大面积背景 (爱丽丝蓝) */
+
+    /* ========== 强调与辅助 (粉色系) ========== */
+    --color-accent: #ff6b9d;           /* 主强调色 - 活力樱花粉 */
+    --color-accent-dark: #e0557e;      /* 粉色悬停/按压态 */
+    --color-accent-secondary: #ffb7c5;  /* 辅助粉 - 浅樱花 (用于标签/装饰) */
+
+    /* ========== 文字颜色 ========== */
+    --color-text-primary: #1e2e3e;     /* 深海军蓝 - 标题/正文 */
+    --color-text-secondary: #5a6d7e;   /* 中灰 - 辅助说明 */
+    --color-text-on-primary: #ffffff;  /* 主色上的文字 (白) */
+    --color-text-on-accent: #ffffff;   /* 强调色上的文字 (白) */
+
+    /* ========== 背景与表面 ========== */
+    --color-background: #f0f8ff;       /* 全局背景 */
+    --color-surface: #ffffff;          /* 卡片/内容面板 */
+    --color-surface-raised: #ffffff;   /* 提升层 */
+
+    /* ========== 边框与分割 ========== */
+    --color-border: rgba(135, 206, 235, 0.35);
+
+    /* ========== 阴影 ========== */
+    --shadow-card: 0 8px 20px rgba(135, 206, 235, 0.30);
+    --shadow-raised: 0 12px 32px rgba(30, 46, 62, 0.10);
+
+    /* ========== 状态反馈 ========== */
+    --color-success: #34c759;
+    --color-warning: #ff9500;
+    --color-error: #ff3b30;
+
+    /* ========== 语义化组件变量 ========== */
+    --btn-bg: var(--color-primary-dark);
+    --btn-bg-hover: #4a8fb5;
+    --btn-text: var(--color-text-on-primary);
+    --btn-accent-bg: var(--color-accent);
+    --btn-accent-hover: var(--color-accent-dark);
+    --card-bg: var(--color-surface);
+    --card-shadow: var(--shadow-card);
+    --nav-bg: var(--color-primary);
+    --nav-text: var(--color-text-on-primary);
+
+    /* ========== 兼容旧组件引用的短变量，统一映射到新配色 ========== */
+    --text: var(--color-text-secondary);
+    --text-h: var(--color-text-primary);
+    --bg: var(--color-background);
+    --bg-soft: #e3f1fb;
+    --border: var(--color-border);
+    --accent: var(--color-primary-dark);     /* 主交互色：天蓝（较深，白字可读） */
+    --accent-2: var(--color-primary);        /* 浅天蓝 */
+    --accent-bg: rgba(135, 206, 235, 0.18);
+    --accent-border: rgba(91, 163, 201, 0.45);
+    --input-bg: #ffffff;
+    --code-bg: #eef6fd;
+    --shadow: var(--shadow-card);
+
+    /* 樱花粉强调别名 */
+    --pink: var(--color-accent);
+    --pink-dark: var(--color-accent-dark);
+    --pink-2: var(--color-accent-secondary);
+    --pink-bg: rgba(255, 107, 157, 0.12);
+    --pink-border: rgba(255, 107, 157, 0.5);
+
+    --sans: 'RHRounded', system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    --mono: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+
+    font: 16px/160% var(--sans);
+    letter-spacing: 0.2px;
+    color-scheme: light;
+    color: var(--text);
+    background: var(--bg);
+    background-image: radial-gradient(circle at 14% 16%, rgba(135, 206, 235, 0.28), transparent 44%),
+    radial-gradient(circle at 86% 84%, rgba(255, 107, 157, 0.14), transparent 46%);
+    background-attachment: fixed;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: "RHRounded", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+body {
+    margin: 0;
+    min-height: 100svh;
+}
+
+h1,
+h2 {
+    font-weight: 700;
+    color: var(--text-h);
+}
+
+p {
+    margin: 0;
+}
+
+/* ---- 共享工具控件样式 ---- */
+.tool-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.tool-body > .row,
+.tool-body > .block,
+.tool-body > .input,
+.tool-body > .err,
+.tool-body > .color-preview,
+.tool-body > .color-picker {
+    width: 100%;
+}
+
+.block {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-h);
+    opacity: 0.85;
+    margin-top: 10px;
+}
+
+.blk-ic {
+    font-size: 14px;
+    margin-right: 6px;
+    color: var(--accent-2);
+    vertical-align: -2px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.row label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-h);
+}
+
+label {
+    white-space: nowrap;
+}
+
+.input {
+    width: 100%;
+    padding: 14px 16px;
+    font: inherit;
+    font-size: 15px;
+    color: var(--text-h);
+    background: var(--input-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    outline: none;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-bg);
+}
+
+.input.mono {
+    font-family: var(--mono);
+    font-size: 13.5px;
+}
+
+.area {
+    min-height: 180px;
+    resize: vertical;
+    line-height: 160%;
+}
+
+.out {
+    background: var(--code-bg);
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-height: 52vh;
+    overflow: auto;
+}
+
+.out.has-error {
+    color: #e5484d;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 22px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--accent);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.2s ease, filter 0.15s ease;
+    white-space: nowrap;
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+.btn span:not(.spin) {
+    font-size: 15px;
+}
+
+.btn:hover {
+    filter: brightness(1.04);
+    box-shadow: 0 6px 14px -4px var(--accent);
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+.err {
+    color: #e5484d;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* 纤细滚动条（Apple 风格），用于各类内部滚动容器 */
+.scroll,
+.tool-scroll,
+.table-scroll,
+pre.out,
+textarea,
+.content-body,
+.grid,
+.list-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+}
+.scroll::-webkit-scrollbar,
+.tool-scroll::-webkit-scrollbar,
+.table-scroll::-webkit-scrollbar,
+pre.out::-webkit-scrollbar,
+textarea::-webkit-scrollbar,
+.content-body::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+.scroll::-webkit-scrollbar-track,
+.tool-scroll::-webkit-scrollbar-track,
+.table-scroll::-webkit-scrollbar-track,
+pre.out::-webkit-scrollbar-track,
+textarea::-webkit-scrollbar-track,
+.content-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+.scroll::-webkit-scrollbar-thumb,
+.tool-scroll::-webkit-scrollbar-thumb,
+.table-scroll::-webkit-scrollbar-thumb,
+pre.out::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar-thumb,
+.content-body::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+.scroll::-webkit-scrollbar-thumb:hover,
+.tool-scroll::-webkit-scrollbar-thumb:hover,
+.table-scroll::-webkit-scrollbar-thumb:hover,
+pre.out::-webkit-scrollbar-thumb:hover,
+textarea::-webkit-scrollbar-thumb:hover,
+.content-body::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+    background-clip: padding-box;
+}
+
+/* 减少动效偏好 */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+    }
+}
