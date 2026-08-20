@@ -45,6 +45,7 @@
     --btn-text: var(--color-text-on-primary);
     --btn-accent-bg: var(--color-accent);
     --btn-accent-hover: var(--color-accent-dark);
+    --card: var(--color-surface);
     --card-bg: var(--color-surface);
     --card-shadow: var(--shadow-card);
     --nav-bg: var(--color-primary);
@@ -319,4 +320,227 @@ textarea::-webkit-scrollbar-thumb:hover,
     * {
         transition: none !important;
     }
+}
+
+/* =========================================================
+   主题切换波纹遮罩（App.vue 中的固定层，由 gsap 驱动 clip-path）
+   ========================================================= */
+.theme-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 150; /* 高于内容、低于顶栏(300)，切换时按钮保持可见 */
+    background: #f0f8ff;
+    clip-path: circle(0% at 50% 50%);
+    pointer-events: none;
+    will-change: clip-path;
+}
+
+/* =========================================================
+   深色模式（html[data-theme='dark']）
+   ========================================================= */
+html[data-theme='dark'] {
+    color-scheme: dark;
+    --color-primary: #7cc3ea;
+    --color-primary-dark: #4f86b8; /* 按钮主色：保持白字可读 */
+    --color-primary-light: #12202e;
+    --color-accent: #f0789d;
+    --color-accent-dark: #d95f88;
+    --color-accent-secondary: #c98ba0;
+    --color-text-primary: #e8eef6;
+    --color-text-secondary: #a4b4c6;
+    --color-text-on-primary: #0d1520;
+    --color-text-on-accent: #0d1520;
+    --color-background: #0d1520;
+    --color-surface: #172230;
+    --color-surface-raised: #1d2a3a;
+    --color-border: rgba(120, 165, 210, 0.24);
+    --shadow-card: 0 8px 22px rgba(0, 0, 0, 0.4);
+    --shadow-raised: 0 12px 34px rgba(0, 0, 0, 0.5);
+    --color-success: #3ddc84;
+    --color-warning: #ffb44d;
+    --color-error: #ff6b81;
+
+    --text: var(--color-text-secondary);
+    --text-h: var(--color-text-primary);
+    --bg: var(--color-background);
+    --bg-soft: #182433;
+    --border: var(--color-border);
+    --accent: var(--color-primary-dark);
+    --accent-2: var(--color-primary);
+    --accent-bg: rgba(124, 195, 234, 0.14);
+    --accent-border: rgba(124, 195, 234, 0.4);
+    --input-bg: #1a2633;
+    --code-bg: #131d29;
+    --shadow: var(--shadow-card);
+    --card: var(--color-surface);
+    --card-bg: var(--color-surface);
+    --pink: var(--color-accent);
+    --pink-dark: var(--color-accent-dark);
+    --pink-2: var(--color-accent-secondary);
+    --pink-bg: rgba(240, 120, 157, 0.14);
+    --pink-border: rgba(240, 120, 157, 0.4);
+    --panel: var(--color-surface);
+
+    background-image: radial-gradient(circle at 14% 16%, rgba(70, 120, 170, 0.22), transparent 44%),
+        radial-gradient(circle at 86% 84%, rgba(255, 107, 157, 0.12), transparent 46%);
+}
+
+/* 背景图蒙版：白色 → 深色 */
+html[data-theme='dark'] .bg-layer::after {
+    background: rgba(5, 10, 16, 0.5) !important;
+}
+
+/* 顶栏 / 侧栏 / 内容区 / 主页 半透明面板 */
+html[data-theme='dark'] .app-header {
+    background: rgba(13, 21, 32, 0.72) !important;
+}
+html[data-theme='dark'] .sidebar {
+    background: rgba(13, 21, 32, 0.8) !important;
+}
+html[data-theme='dark'] .content {
+    background: rgba(13, 21, 32, 0.72) !important;
+}
+html[data-theme='dark'] .home {
+    background: rgba(13, 21, 32, 0.9) !important;
+}
+
+/* 顶栏 / 侧栏 / 各工具中硬编码为白色的控件 */
+html[data-theme='dark'] .logo-tag,
+html[data-theme='dark'] .icon-btn,
+html[data-theme='dark'] .theme-btn,
+html[data-theme='dark'] .search,
+html[data-theme='dark'] .input,
+html[data-theme='dark'] .countdown-setup .field input {
+    background: var(--input-bg) !important;
+    color: var(--text-h) !important;
+}
+
+/* 主页卡片 */
+html[data-theme='dark'] .home .card,
+html[data-theme='dark'] .card {
+    background: var(--color-surface) !important;
+}
+html[data-theme='dark'] .home .card:hover {
+    border-color: rgba(124, 195, 234, 0.45) !important;
+}
+
+/* 秒表 */
+html[data-theme='dark'] .ctrl-btn {
+    background: var(--color-surface) !important;
+}
+html[data-theme='dark'] .ctrl-btn.outline {
+    background: transparent !important;
+}
+html[data-theme='dark'] .more-toggle {
+    background: var(--color-surface) !important;
+}
+
+/* Markdown 编辑器：面板 + GitHub 深色渲染 */
+html[data-theme='dark'] .md-pane,
+html[data-theme='dark'] .md-editor,
+html[data-theme='dark'] .md-act {
+    background: var(--color-surface) !important;
+}
+html[data-theme='dark'] .md-editor::placeholder {
+    color: #5d6f82 !important;
+}
+html[data-theme='dark'] .md-empty {
+    color: #7d8ea0 !important;
+}
+html[data-theme='dark'] .md-empty-icon {
+    color: #3a4a5c !important;
+}
+html[data-theme='dark'] .md-empty small {
+    color: #5d6f82 !important;
+}
+html[data-theme='dark'] .md-content {
+    color: #e6edf3 !important;
+}
+html[data-theme='dark'] .md-content h1,
+html[data-theme='dark'] .md-content h2 {
+    border-bottom-color: #21262d !important;
+}
+html[data-theme='dark'] .md-content h6 {
+    color: #8b949e !important;
+}
+html[data-theme='dark'] .md-content a {
+    color: #58a6ff !important;
+}
+html[data-theme='dark'] .md-content blockquote {
+    color: #8b949e !important;
+    border-left-color: #30363d !important;
+}
+html[data-theme='dark'] .md-content code {
+    background: rgba(110, 118, 129, 0.4) !important;
+}
+html[data-theme='dark'] .md-content pre {
+    background: #0d1117 !important;
+}
+html[data-theme='dark'] .md-content pre code {
+    background: transparent !important;
+}
+html[data-theme='dark'] .md-content th,
+html[data-theme='dark'] .md-content td {
+    border-color: #30363d !important;
+}
+html[data-theme='dark'] .md-content th,
+html[data-theme='dark'] .md-content tr:nth-child(2n) {
+    background: #161b22 !important;
+}
+html[data-theme='dark'] .md-content hr {
+    background: #21262d !important;
+}
+
+/* Json 工具 */
+html[data-theme='dark'] .jb,
+html[data-theme='dark'] .jmini,
+html[data-theme='dark'] .jselect,
+html[data-theme='dark'] .editor-wrap,
+html[data-theme='dark'] .editor-area,
+html[data-theme='dark'] .jinput,
+html[data-theme='dark'] .ctext {
+    background: var(--color-surface) !important;
+}
+html[data-theme='dark'] .editor-area,
+html[data-theme='dark'] .jinput,
+html[data-theme='dark'] .ctext {
+    color: var(--text-h) !important;
+}
+html[data-theme='dark'] .jb:hover {
+    background: var(--accent-bg) !important;
+    color: var(--accent) !important;
+}
+
+/* 图片批处理 */
+html[data-theme='dark'] .chip,
+html[data-theme='dark'] .btn.ghost {
+    background: var(--color-surface) !important;
+}
+html[data-theme='dark'] .mini.danger,
+html[data-theme='dark'] .mini.danger {
+    background: var(--color-surface) !important;
+    color: var(--color-accent) !important;
+    border-color: rgba(240, 120, 157, 0.35) !important;
+}
+html[data-theme='dark'] .mini.danger:hover,
+html[data-theme='dark'] .mini.danger:hover {
+    background: rgba(240, 120, 157, 0.12) !important;
+}
+
+/* OCR / 图片压缩 / 颜色 的半透明面板 */
+html[data-theme='dark'] .preview,
+html[data-theme='dark'] .result,
+html[data-theme='dark'] .panel,
+html[data-theme='dark'] .table-scroll {
+    background: rgba(18, 27, 38, 0.6) !important;
+}
+html[data-theme='dark'] .result .panel-body {
+    background: var(--color-surface) !important;
+}
+html[data-theme='dark'] .color-preview .alpha-tag {
+    background: rgba(18, 27, 38, 0.78) !important;
+    color: var(--text-h) !important;
+}
+html[data-theme='dark'] .picker {
+    background: var(--color-surface) !important;
 }
