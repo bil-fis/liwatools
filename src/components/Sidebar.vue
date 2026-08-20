@@ -3,6 +3,8 @@ import {computed, reactive, ref, watch} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import {categories, tools} from '../tools/registry'
 
+const buildstr = `${__BUILD_REVISION__}.${new Date(__BUILD_TIME_ISO__).getTime()}`
+
 const copyrightYear = computed(() => {
   const now = new Date().getFullYear()
   if (now !== 2026) {
@@ -158,6 +160,8 @@ function select(id: string) {
     </nav>
 
     <div v-if="!collapsed" class="sidebar-foot">
+      <p>S.Y.Q要永远做你自己呀</p>
+      <p>{{buildstr}}</p>
       &copy; {{ copyrightYear }} 林晚晚ss.
     </div>
   </aside>

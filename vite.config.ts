@@ -3,6 +3,23 @@ import vue from '@vitejs/plugin-vue'
 import UnoCSS from 'unocss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import legacy from '@vitejs/plugin-legacy'
+import {execSync} from "node:child_process";
+import * as crypto from "node:crypto";
+
+function getGitShortHash(){
+  try{
+    return execSync('git rev-parse --short HEAD',{encoding:'utf-8'}).trim()
+  }catch(e){
+    return null
+  }
+}
+
+function getBuildFallbackHash(){
+  return crypto.createHash('sha256').update(new Date().toLocaleString()).digest('hex').slice(0,8)
+}
+
+const gitHash = getGitShortHash()
+const buildversion = gitHash ?? getBuildFallbackHash()
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -13,9 +30,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
       manifest: {
-        name: 'liwatools 小工具集合',
-        short_name: 'liwatools',
-        description: '二次元可爱风格的小工具集合',
+        name: '晚晚工具箱',
+        short_name: '晚晚工具箱',
+        description: '随便做的工具合集，解决了找不到工具的问题（划掉）',
         theme_color: '#2f7bff',
         background_color: '#f3f8ff',
         display: 'standalone',
@@ -45,5 +62,11 @@ export default defineConfig({
   ],
   server: {
     host: '0.0.0.0',
+  },
+  define:{
+    __BUILD_TIME__: JSON.stringify(new Date().toLocaleString()),
+    __BUILD_REVISION__:JSON.stringify(buildversion),
+    __APP_VERSION__:JSON.stringify(process.env.npm_package_version),
+    __BUILD_TIME_ISO__:JSON.stringify(new Date().toISOString()),
   },
 })

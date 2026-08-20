@@ -1,5 +1,55 @@
-# Vue 3 + TypeScript + Vite
+# 晚晚工具箱 (liwatools)
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+二次元可爱风格的**纯前端小工具集合**，所有工具都在浏览器本地完成，数据不上传、即开即用。
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## ✨ 功能一览
+
+### 主页（卡片墙）
+- 按分类展示全部工具的卡片墙，点击卡片有 **GSAP 放大飞出动画**，随后进入对应工具页（桌面端侧边栏从左侧滑入）
+- 支持移动端自适应，仅卡片飞入效果
+
+### 深色模式
+- 精致的「深海静谧 · Apple 风格」深色配色，跟随系统偏好自动初始化
+- 通过顶栏右上角按钮切换，**波纹扩散 / 回缩动画**（GSAP clip-path），波纹扫过即变色
+- 主题状态通过 **Pinia 持久化**到 localStorage，跨路由切换不丢失、首屏无闪烁
+
+### 工具列表
+| 工具 | 说明 | 分类 |
+|------|------|------|
+| JSON 格式化 | 美化 / 校验 / 压缩 / 转义 / JSONPath / 比较 | 开发工具类 |
+| 时间戳转换 | Unix 时间戳与日期互转，实时更新 | 开发工具类 |
+| Base64 编解码 | 文本与 Base64 互相转换 | 开发工具类 |
+| 随机数生成 | 批量随机整数/小数，支持去重、排序、导出 | 开发工具类 |
+| 秒表 · 倒计时 | 正向计时与倒计时，结束自动响铃（Web Audio） | 开发工具类 |
+| Markdown 编辑器 | 分屏实时预览（GitHub 风格渲染 + 代码高亮），导出 HTML/MD | 开发工具类 |
+| 图片批量转换 | 批量转换图片格式（PNG / JPG / WEBP） | 文件转换类 |
+| 文档批量转换 | 批量转换文档格式（规划中） | 文件转换类 |
+| 颜色转换 | HEX / RGB / RGBA 互转，支持透明度 | 设计辅助类 |
+| 图片压缩 | 纯前端压缩图片体积，保护隐私 | 图像处理类 |
+| 图片文字提取 | PaddleOCR 本地识别图片文字 | 图像处理类 |
+
+## 🛠 技术栈
+
+- **框架**：Vue 3（`<script setup>`）+ TypeScript + Vite
+- **状态**：Pinia
+- **路由**：Vue Router（history 模式，`/` 为主页）
+- **样式**：UnoCSS + CSS 变量主题 + MingCute 图标
+- **动画**：GSAP
+- **解析/高亮**：markdown-it + highlight.js、Prism.js
+- **能力**：PWA（可安装）、`@vitejs/plugin-legacy`（老旧浏览器兼容，含 IE11 polyfill）
+- **OCR**：PaddleOCR.js（本地识别，无需上传）
+
+## 🚀 开始使用
+
+```bash
+npm install      # 安装依赖
+npm run dev      # 本地开发
+npm run build    # 类型检查 + 生产构建
+npm run preview  # 预览构建产物
+```
+
+> 各工具均有独立的懒加载分包，首次进入对应工具时才加载，打开速度更快。
+
+## 📄 许可证
+
+本项目基于 [GPL-3.0 License](./LICENSE) 开源。
