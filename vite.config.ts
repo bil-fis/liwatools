@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import UnoCSS from 'unocss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
+import legacy from '@vitejs/plugin-legacy'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -34,6 +35,12 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,svg}'],
         maximumFileSizeToCacheInBytes: 30 * 1024 * 1024,
       },
+    }),
+    legacy({
+      // 目标老旧浏览器（含 IE11），由 core-js 自动注入所需 polyfill
+      targets: ['defaults', '> 0.2%', 'last 2 versions', 'Firefox ESR', 'not dead', 'ie >= 11'],
+      // async/await、generator 需要 regenerator-runtime
+      additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
     }),
   ],
   server: {

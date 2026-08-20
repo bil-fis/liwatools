@@ -185,13 +185,13 @@ onBeforeUnmount(() => {
     <div class="workspace">
       <div class="preview">
         <div class="panel-head">
-          <span class="i-mingcute-image-line"></span> 图片预览
+          <span class="i-mingcute-photo-album-line"></span> 图片预览
           <b v-if="fileName" class="fname" :title="fileName">{{ fileName }}</b>
         </div>
         <div class="panel-body">
           <img v-if="previewUrl" :src="previewUrl" alt="预览" />
           <div v-else class="ph">
-            <span class="i-mingcute-image-line"></span>
+            <span class="i-mingcute-photo-album-line"></span>
             <p>选择图片</p>
             <p class="hint">支持 PNG / JPG / WEBP / BMP 等</p>
           </div>

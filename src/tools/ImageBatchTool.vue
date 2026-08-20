@@ -398,7 +398,7 @@ onBeforeUnmount(() => {
           </div>
 
           <div v-if="!items.length" class="empty">
-            <span class="i-mingcute-image-line big"></span>
+            <span class="i-mingcute-photo-album-line big"></span>
             <p>还没有图片，拖拽或点击上方区域添加吧～</p>
           </div>
         </div>

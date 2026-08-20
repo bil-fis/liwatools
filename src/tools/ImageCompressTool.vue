@@ -146,7 +146,7 @@ function download() {
     <div v-if="origUrl" class="compare">
       <div class="panel">
         <div class="panel-head">
-          <span class="i-mingcute-image-line"></span> 原图
+          <span class="i-mingcute-photo-album-line"></span> 原图
           <b>{{ origSizeText }}</b>
         </div>
         <div class="panel-body">

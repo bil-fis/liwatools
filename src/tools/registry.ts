@@ -2,6 +2,8 @@ import type { CategoryDef, ToolDef } from './types'
 import JsonTool from './JsonTool.vue'
 import TimestampTool from './TimestampTool.vue'
 import Base64Tool from './Base64Tool.vue'
+import StopwatchTool from './StopwatchTool.vue'
+import RandomTool from './RandomTool.vue'
 import ColorTool from './ColorTool.vue'
 import ImageBatchTool from './ImageBatchTool.vue'
 import DocBatchTool from './DocBatchTool.vue'
@@ -39,6 +41,22 @@ export const tools: ToolDef[] = [
     icon: 'code-line',
     component: Base64Tool,
     desc: '文本与 Base64 互相转换',
+    category: 'dev',
+  },
+  {
+    id: 'random',
+    name: '随机数生成',
+    icon: 'hashtag-line',
+    component: RandomTool,
+    desc: '生成批量随机整数/小数，支持去重与排序',
+    category: 'dev',
+  },
+  {
+    id: 'stopwatch',
+    name: '秒表 · 倒计时',
+    icon: 'time-line',
+    component: StopwatchTool,
+    desc: '正向计时与倒计时，结束自动响铃',
     category: 'dev',
   },
   {
