@@ -187,6 +187,23 @@ function select(id: string) {
   width: 72px;
 }
 
+/* 桌面端：从主页进入工具页时，侧边栏从左滑入 */
+@media (min-width: 769px) {
+  .sidebar {
+    animation: sidebarIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+@keyframes sidebarIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0.3;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 .nav {
   display: flex;
   flex-direction: column;

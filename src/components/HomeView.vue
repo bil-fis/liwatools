@@ -1,17 +1,12 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import gsap from 'gsap'
 import { categories, tools } from '../tools/registry'
 import type { ToolDef } from '../tools/types'
 
 const router = useRouter()
-
-const activeTool = ref<ToolDef | null>(null)
-const drawerOpen = ref(false)
 const gridRef = ref<HTMLElement | null>(null)
-const drawerRef = ref<HTMLElement | null>(null)
-const scrimRef = ref<HTMLElement | null>(null)
 
 const prefersReduced =
   typeof window !== 'undefined' &&
@@ -24,71 +19,28 @@ const groups = computed(() =>
     .filter((g) => g.items.length > 0),
 )
 
+/** 点击卡片：放大并向右飞出，随后切换到对应工具页 */
 function openTool(tool: ToolDef, el: HTMLElement) {
-  if (drawerOpen.value) return
-  drawerOpen.value = true
-  activeTool.value = tool
-
   if (prefersReduced) {
-    showDrawer()
+    router.push(`/${tool.id}/`)
     return
   }
 
-  // 1) 卡片放大并向右侧“飞入”页面
   const rect = el.getBoundingClientRect()
-  const targetX = window.innerWidth - rect.left + 160
+  const targetX = window.innerWidth - rect.left + 140
   gsap
     .timeline()
     .to(el, {
       x: targetX,
-      y: -36,
-      scale: 1.16,
+      y: -48,
+      scale: 1.22,
+      rotate: 5,
       opacity: 0,
-      duration: 0.55,
+      duration: 0.5,
       ease: 'power2.in',
     })
-    // 2) 右侧侧边栏滑入
-    .add(() => showDrawer())
-    .set(el, { clearProps: 'transform,opacity' })
+    .call(() => router.push(`/${tool.id}/`))
 }
-
-function showDrawer() {
-  if (scrimRef.value) {
-    gsap.fromTo(scrimRef.value, { opacity: 0 }, { opacity: 1, duration: 0.35, ease: 'power1.out' })
-  }
-  if (drawerRef.value) {
-    gsap.fromTo(drawerRef.value, { x: '100%' }, { x: '0%', duration: 0.55, ease: 'power3.out' })
-  }
-}
-
-function closeTool() {
-  if (!drawerOpen.value) return
-  const tl = gsap.timeline()
-  if (drawerRef.value) tl.to(drawerRef.value, { x: '100%', duration: 0.4, ease: 'power2.in' })
-  if (scrimRef.value) tl.to(scrimRef.value, { opacity: 0, duration: 0.3 }, '<')
-  tl.call(() => {
-    activeTool.value = null
-    drawerOpen.value = false
-  })
-}
-
-/** 在完整页面（带左侧导航）中打开当前工具 */
-function openFullPage() {
-  const t = activeTool.value
-  if (!t) return
-  closeTool()
-  router.push(`/${t.id}/`)
-}
-
-// Esc 关闭抽屉
-function onKey(e: KeyboardEvent) {
-  if (e.key === 'Escape') closeTool()
-}
-watch(drawerOpen, (open) => {
-  if (open) window.addEventListener('keydown', onKey)
-  else window.removeEventListener('keydown', onKey)
-})
-onUnmounted(() => window.removeEventListener('keydown', onKey))
 
 onMounted(async () => {
   await nextTick()
@@ -141,29 +93,6 @@ onMounted(async () => {
         </div>
       </section>
     </div>
-
-    <!-- 右侧工具抽屉 -->
-    <teleport to="body">
-      <div v-if="drawerOpen" ref="scrimRef" class="scrim" @click="closeTool"></div>
-      <aside v-if="activeTool" ref="drawerRef" class="drawer" :class="{ open: drawerOpen }">
-        <header class="drawer-head">
-          <span :class="`i-mingcute-${activeTool.icon}`" class="drawer-icon"></span>
-          <div class="drawer-title">
-            <h3>{{ activeTool.name }}</h3>
-            <p>{{ activeTool.desc }}</p>
-          </div>
-          <button class="drawer-btn" title="在完整页面打开" @click="openFullPage">
-            <span class="i-mingcute-expand-player-line"></span>
-          </button>
-          <button class="drawer-btn close" title="关闭" @click="closeTool">
-            <span class="i-mingcute-close-line"></span>
-          </button>
-        </header>
-        <div class="drawer-body">
-          <component :is="activeTool.component" />
-        </div>
-      </aside>
-    </teleport>
   </main>
 </template>
 
@@ -305,106 +234,6 @@ onMounted(async () => {
   line-height: 1.5;
 }
 
-/* ===== 右侧抽屉 ===== */
-.scrim {
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  background: rgba(60, 47, 71, 0.28);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  opacity: 0;
-}
-.drawer {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 50;
-  width: min(680px, 96vw);
-  display: flex;
-  flex-direction: column;
-  background: #fff;
-  box-shadow: -14px 0 44px rgba(30, 46, 62, 0.16);
-  transform: translateX(100%);
-  will-change: transform;
-}
-.drawer-head {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px 22px;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg-soft);
-  flex-shrink: 0;
-}
-.drawer-icon {
-  font-size: 26px;
-  color: var(--pink);
-  background: #fff;
-  width: 46px;
-  height: 46px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 14px;
-  flex-shrink: 0;
-  box-shadow: var(--shadow);
-}
-.drawer-title {
-  flex: 1;
-  min-width: 0;
-}
-.drawer-title h3 {
-  margin: 0;
-  font-size: 17px;
-  font-weight: 800;
-  color: var(--text-h);
-}
-.drawer-title p {
-  margin: 2px 0 0;
-  font-size: 12.5px;
-  color: var(--text);
-  opacity: 0.75;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.drawer-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: #fff;
-  color: var(--text-h);
-  cursor: pointer;
-  transition: background 0.18s ease, color 0.18s ease, transform 0.12s ease;
-  flex-shrink: 0;
-}
-.drawer-btn:hover {
-  background: var(--accent-bg);
-  color: var(--accent);
-}
-.drawer-btn.close:hover {
-  background: #ffeef2;
-  color: var(--error);
-}
-.drawer-btn:active {
-  transform: scale(0.92);
-}
-.drawer-btn span {
-  font-size: 18px;
-}
-.drawer-body {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  padding: 22px;
-}
-
 @media (max-width: 768px) {
   .home-inner {
     padding: 26px 18px 44px;
@@ -426,12 +255,6 @@ onMounted(async () => {
   .card {
     padding: 20px 8px;
     min-height: 128px;
-  }
-  .drawer {
-    width: 100%;
-  }
-  .drawer-body {
-    padding: 14px;
   }
 }
 </style>
