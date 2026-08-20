@@ -37,18 +37,17 @@ function onToggleTheme(el: HTMLElement) {
   const rect = el.getBoundingClientRect()
   const cx = rect.left + rect.width / 2
   const cy = rect.top + rect.height / 2
-  // 遮罩使用目标主题的底色：浅色 #f0f8ff / 深色 #0d1520（与 CSS 变量一致）
-  overlay.style.background = targetDark ? '#0d1520' : '#f0f8ff'
+  // 遮罩铺上「旧主题」底色，然后从按钮中心回缩——
+  // 主题在动画开始时立即切换，波纹经过之处即为新主题（波纹经过即变色）
+  overlay.style.background = targetDark ? '#f0f8ff' : '#090d17'
   gsap.killTweensOf(overlay)
-  gsap.set(overlay, { clipPath: `circle(0% at ${cx}px ${cy}px)` })
+  gsap.set(overlay, { clipPath: `circle(150% at ${cx}px ${cy}px)` })
+  themeStore.setDark(targetDark)
   gsap.to(overlay, {
-    clipPath: `circle(150% at ${cx}px ${cy}px)`,
-    duration: 0.85,
+    clipPath: `circle(0% at ${cx}px ${cy}px)`,
+    duration: 0.75,
     ease: 'power2.inOut',
     onComplete: () => {
-      // 遮罩完全覆盖时切换主题，再瞬间收起（同色不可见）
-      themeStore.setDark(targetDark)
-      gsap.set(overlay, { clipPath: `circle(0% at ${cx}px ${cy}px)` })
       themeAnimating.value = false
     },
   })
