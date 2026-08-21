@@ -75,7 +75,7 @@ async function getEngine() {
     ocr = await PaddleOCR.create({
       lang: lang.value,
       ocrVersion: 'PP-OCRv5',
-      ortOptions: { backend: 'wasm', numThreads: 1, simd: true,wasmPaths:"https://cdn.staticfile.net/onnxruntime-web/1.22.0/" },
+      ortOptions: { backend: 'wasm', numThreads: 1, simd: true,wasmPaths:"https://cdn.staticfile.net/onnxruntime-web/1.27.0/" },
     })
     engineInfo.value = 'PP-OCRv5'
     status.value = 'OCR 引擎就绪'
